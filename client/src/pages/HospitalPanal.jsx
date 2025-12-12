@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
+import API from '../api';
 import { UserContext } from '../store/userContext';
 import '../styles/HospitalPanal.css';
 import { databaseUrls } from '../data/databaseUrls';
