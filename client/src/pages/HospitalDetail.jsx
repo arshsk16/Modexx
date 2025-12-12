@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/UserProfile.css';
+import API from '../api';
 import { databaseUrls } from '../data/databaseUrls';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -14,13 +15,24 @@ const HospitalDetail = () => {
   useEffect(() => {
     if (!hospitalId) {
       navigate('/not-found');
-    }else{
-      // fetch
-      fetch(databaseUrls.hospitals.fromId.replace('_id', hospitalId))
-      .then((data) => data.json())
-      .then((data) => {setUserData(data)})
+      return;
     }
-  },[]);
+
+    // fetch hospital by id using centralized API instance
+    const fetchHospital = async () => {
+      try {
+        const url = databaseUrls.hospitals.fromId.replace('_id', hospitalId);
+        const res = await API.get(url);
+        setUserData(res.data);
+      } catch (err) {
+        console.error('Error fetching hospital details:', err);
+        // optionally navigate to a not-found or error page
+        navigate('/not-found');
+      }
+    };
+
+    fetchHospital();
+  }, [hospitalId, navigate]);
 
   if (!hospitalId) {
     return <></>;
@@ -29,10 +41,10 @@ const HospitalDetail = () => {
   // Fallback for when user data is not available yet
   if (!userData) {
     return <div>Loading...</div>;
-  } 
+  }
 
   const capitalizeFirstLetter = (string) =>
-    string.charAt(0).toUpperCase() + string.slice(1);
+    string && string.length > 0 ? string.charAt(0).toUpperCase() + string.slice(1) : '';
 
   return (
     <>
@@ -50,28 +62,30 @@ const HospitalDetail = () => {
           <p>
             <strong>Email:</strong> {userData.email}
           </p>
-            <>
-              <p>
-                <strong>Address:</strong>{' '}
-                {`${userData.address?.street || 'N/A'}, ${
-                  userData.address?.city || 'N/A'
-                }, ${userData.address?.state || 'N/A'}`}
-              </p>
-              <p>
-                <strong>Phone:</strong> {userData.phone || 'N/A'}
-              </p>
-              <p>
-                <strong>Departments:</strong>{' '}
-                {userData.departments.join(', ') || 'N/A'}
-              </p>
-              <p>
-                <strong>Available Services:</strong>{' '}
-                {userData.availableServices.join(', ') || 'N/A'}
-              </p>
-              <p>
-                <strong>Ratings:</strong> {userData.ratings || 'N/A'}/5
-              </p>
-            </>
+          <>
+            <p>
+              <strong>Address:</strong>{' '}
+              {`${userData.address?.street || 'N/A'}, ${userData.address?.city || 'N/A'}, ${userData.address?.state || 'N/A'}`}
+            </p>
+            <p>
+              <strong>Phone:</strong> {userData.phone || 'N/A'}
+            </p>
+            <p>
+              <strong>Departments:</strong>{' '}
+              {Array.isArray(userData.departments) && userData.departments.length > 0
+                ? userData.departments.join(', ')
+                : 'N/A'}
+            </p>
+            <p>
+              <strong>Available Services:</strong>{' '}
+              {Array.isArray(userData.availableServices) && userData.availableServices.length > 0
+                ? userData.availableServices.join(', ')
+                : 'N/A'}
+            </p>
+            <p>
+              <strong>Ratings:</strong> {userData.ratings || 'N/A'}/5
+            </p>
+          </>
         </div>
 
         {/* Doctors Section */}
@@ -107,9 +121,7 @@ const HospitalDetail = () => {
                     <td>{doctor.phone}</td>
                     <td>
                       {doctor.opdSchedule &&
-                      Object.values(doctor.opdSchedule).some(
-                        (value) => value !== null,
-                      ) ? (
+                      Object.values(doctor.opdSchedule).some((value) => value !== null) ? (
                         <p>
                           {Object.keys(doctor.opdSchedule)
                             .filter((day) => doctor.opdSchedule[day] !== null)
@@ -127,7 +139,6 @@ const HospitalDetail = () => {
           )}
         </div>
       </div>
-
     </>
   );
 };
