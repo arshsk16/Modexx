@@ -161,6 +161,21 @@ app.get("/profile", authenticateToken, (req, res) => {
 // HEALTH CHECK
 app.get("/ping", (_, res) => res.json({ message: "pong" }));
 
+// Add this /api/health endpoint for uptime + DB state (useful for Render / monitoring)
+const mongoose = require("mongoose"); // if not already required at top
+
+app.get("/api/health", (req, res) => {
+  const dbState = mongoose?.connection?.readyState ?? null; // 0=disconnected,1=connected,2=connecting,3=disconnecting
+  res.json({
+    ok: true,
+    env: process.env.NODE_ENV || "development",
+    uptime_seconds: process.uptime(),
+    dbState,
+    timestamp: new Date().toISOString(),
+  });
+});
+
+
 // METRICS FOR PROMETHEUS
 client.collectDefaultMetrics();
 app.get("/metrics", async (_, res) => {
