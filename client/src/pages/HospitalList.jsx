@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
-import axios from 'axios';
+import API from '../api';
 import '../styles/HospitalList.css';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -37,9 +37,7 @@ const HospitalsList = () => {
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
-        const response = await axios.get(
-          databaseUrls.hospitals.all,
-        );
+        const response = await API.get(databaseUrls.hospitals.all);
 
         // Combine local data and fetched data
         const combinedHospitals = [...hospitalsData, ...response.data];
@@ -82,7 +80,7 @@ const HospitalsList = () => {
       }
 
       const userId = user._id;
-      const response = await axios.post(
+      const response = await API.post(
         databaseUrls.hospitals.bookHospital.replace('_id', hospitalId),
         {
           userId,
