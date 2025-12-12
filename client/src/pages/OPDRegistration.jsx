@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api';
 import '../styles/OPD.css';
 import '../styles/Loader.css';
 import jsPDF from 'jspdf';
@@ -178,7 +178,7 @@ function OPDRegistrationForm() {
       date: formData.date,
     };
 
-    axios
+    API
       .post(databaseUrls.hospitals.emergency, submissionData)
       .then((response) => {
         console.log('Successfully registered!', response.data);
