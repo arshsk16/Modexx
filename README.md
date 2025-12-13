@@ -1,4 +1,4 @@
-# Medi-Connect
+# Modexx
 
 Modern full‑stack platform for hospital discovery, patient onboarding, and appointment management. The frontend is a React app (Create React App + Tailwind), and the backend is a Node/Express API backed by MongoDB with Google OAuth, JWT auth, email/SMS notifications, and Prometheus metrics.
 
@@ -131,5 +131,4 @@ See `client/src/data/databaseUrls.js`.
 ISC (see package.json)
 
 
-Frontend Deployment (Vercel / Netlify)
 
