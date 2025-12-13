@@ -16,14 +16,14 @@ The project provides a seat-booking platform with separate frontend and backend 
 ---
 
 ## 📁 Project Structure
-/
+```
 ├── client/ # React + TypeScript frontend
 ├── server/ # Node.js backend (Express + MongoDB)
 ├── DEPENDENCIES.md
 ├── IMPLEMENTATION_STEPS.md
 ├── requirements.txt # Optional python utilities
 └── README.md
-
+```
 ---
 Frontend Setup
 cd client
