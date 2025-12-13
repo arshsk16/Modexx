@@ -2,6 +2,9 @@
 
 Modern full‑stack platform for hospital discovery, patient onboarding, and appointment management. The frontend is a React app (Create React App + Tailwind), and the backend is a Node/Express API backed by MongoDB with Google OAuth, JWT auth, email/SMS notifications, and Prometheus metrics.
 
+demo link frontend:
+https://modexx-rho.vercel.app/
+
 ## Overview
 - Patient registration with multi‑step forms and profile management
 - Hospital listing, detail pages, bookings, and appointments
